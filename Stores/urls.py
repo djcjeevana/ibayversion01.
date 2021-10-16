@@ -13,6 +13,9 @@ urlpatterns = [
     path('product/<int:id>/<slug:slug>/', category_product, name='category_product'), 
     path('search/', SearchView.as_view(), name='search'),
     path('add-to-cart',add_to_cart,name='add_to_cart'),
+    path('delete-from-cart',delete_cart_item,name='delete-from-cart'),
+      
+    
 ] 
 
 

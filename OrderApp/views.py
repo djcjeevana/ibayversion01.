@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import HttpResponseRedirect, render
-
+from django.template.loader import render_to_string
 from OrderApp.models import ShopCart, ShopingCartForm
 from Products.models import Category
 from Stores.models import Setting
@@ -118,18 +118,29 @@ def cart_detials(request):
     total_amt=0
     setting = Setting.objects.get(id=1)    
     if 'cartdata' in request.session:
-        for p_id,item in request.session['cartdata'].items():
-                     
-            total_amt+=int(item['qty'])*float(item['price'])
-            context = {'cart_data':request.session['cartdata'],
-                       'totalitems':len(request.session['cartdata']),
-                       'total_amt':total_amt,'setting': setting}
-                        
-                        
-            return render(request, 'cart_details.html',context)
-        else:
-            context ={'cart_data':'','totalitems':0,
-                      'total_amt':total_amt,
-                      'setting': setting
-                      }
-            return render(request, 'cart_details.html',context)
+        for p_id,item in request.session['cartdata'].items():                     
+            total_amt+=int(item['qty'])*float(item['price']) # $ ලකුණක් මිලත් එක්ක පාස් වෙලා තිබ්බ එක වුල උනේ. 
+                                   
+        return render(request, 'cart_details.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt,'setting':setting})
+    else:
+        return render(request, 'cart_details.html',{'cart_data':'','totalitems':0,'total_amt':total_amt,'setting':setting})
+            
+            
+#def delete_cart_item(request):
+#    p_id=str(request.GET['id']) # ID එක ගන්නවා
+#    print("in side thte dlete methohd---------------------------------- ")
+#    setting = Setting.objects.get(id=1) 
+#    if 'cartdata' in request.session:# session එක ගන්නවා 
+#        if p_id in request.session['cartdata']:# ඉහතින් ගත්ත id එකට අදාල product එක session එකේ  තියෙවනවා නම්
+#            cart_data=request.session['cartdata']# session එක  card_data එකට දාල
+#            del request.session['cartdata'][p_id]# ඒ product එක කරලා දානව ඊට පස්සේ
+#            request.session['cartdata']=cart_data# product එක  remove කරලා  remove කලබවට තොරතුරු නැවැත  session එක updataeකරයි
+#            
+#    total_amt=0
+#    for p_id,item in request.session['cartdata'].items():
+#        total_amt+=int(item['qty'])*float(item['price'])
+#        
+#    t=render_to_string('updated-cart-list.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt})
+#    return JsonResponse({'data':t,'totalitems':len(request.session['cartdata'])})
+        
+    

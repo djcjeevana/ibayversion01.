@@ -33,6 +33,28 @@ $(document).ready(function(){
 	});
 
 
+	// Delet Item form Cart Details
+	$(document).on('click','.delete-item',function(){ // ඩොට් එහෙම ඉතාම වැදගත බව මතක තබා ගන්න. 
+		var _pId=$(this).attr('data-item');
+		var _vm=$(this);
+				
+		$.ajax({
+			url:'/delete-from-cart',
+			
+			data:{
+				'id':_pId,								
+			},
+			dataType:'json',
+			beforeSend:function(){
+				_vm.attr('disabled',true);
+			},
+			success:function(res){
+				$(".cart-list").text(res.totalitems);
+				_vm.attr('disabled',false);
+				$("#cartList").html(res.data);
+			}
+		});
+	});	
 	
 
 
