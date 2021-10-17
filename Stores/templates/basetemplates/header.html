@@ -28,7 +28,7 @@
                 <ul class="ht-setting-list">
                 {% if request.user.is_authenticated %}
                 <li><a href="{% url 'account:userprofile' %}">Hello, {{request.user.username}}</a></li>
-                <li><a href="{% url 'account:account' %}">View Account</a></li>
+                <li><a href="{% url 'account:userprofile' %}">View Account</a></li>
                 <li><a href="{% url 'account:logout' %}">Logout</a></li>
                 
                 

@@ -18,6 +18,7 @@ from .tokens import account_activation_token
 @login_required
 def dashboard(request):
     #orders = user_orders(request)
+    
     return render(request,
                   'account/user/dashboard.html')
 
@@ -53,7 +54,7 @@ def account_register(request):
                'setting': setting,
                'form': registerForm}
     
-    return render(request, 'account/registration/register.html', {'form': registerForm})
+    return render(request, 'account/registration/register.html', context)
 
 def account_activate(request, uidb64, token):
     try:
@@ -102,12 +103,43 @@ def login_view(request):
              
     else:
         form = UserLoginForm()
-            
+        
+    setting = Setting.objects.get(id=1)
+    context['setting'] = setting        
     context['login_form'] = form
     return render(request,'account/registration/login.html',context)
 
 
-def account_view(request):
+def user_update(request):
+    if request.method == 'POST':
+        # request.user is user  data
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(
+            request.POST, request.FILES, instance=request.user.userprofile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your account has been updated!')
+            return redirect('userprofile')
+    else:
+       # category = Category.objects.all()
+        user_form = UserUpdateForm(instance=request.user)
+        # "userprofile" model -> OneToOneField relatinon with user
+        profile_form = ProfileUpdateForm(instance=request.user)
+        category = Category.objects.all()
+        setting = Setting.objects.get(id=1)
+        context = {
+            # 'category': category,
+            'user_form': user_form,
+            'profile_form': profile_form,
+            'category': category,
+            'setting': setting,
+        }
+        return render(request, 'userupdate.html', context)
+
+
+
+def account_update(request):
     
     if not request.user.is_authenticated:
         return redirect("Stores:home")
@@ -132,6 +164,8 @@ def account_view(request):
                     
                 }
                 )
+    setting = Setting.objects.get(id=1)
+    context['setting'] = setting
     context['account_form'] = form
     return render(request,'account/registration/account.html',context)
 
@@ -141,7 +175,7 @@ def userprofile(request):
     setting = Setting.objects.get(id=1)
     current_user = request.user
     profile = UserBase.objects.get(id=current_user.id)
-    print('-------------------------------------------------------------- prociel',profile)
+    
     context = {
                'setting': setting,
                'profile': profile}

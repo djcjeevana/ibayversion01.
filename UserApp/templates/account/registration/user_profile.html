@@ -1,22 +1,19 @@
 {% extends 'basetemplates/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
 {% block mainbody %}
- 
 
-<div id="breadcrum">
-      <div class="container">
-          <div>
-              <ul class="breadcrumb">
-                  <li> <a href="">Home</a></li>
-                  >>
-                  <li class="active">User Profile</li>
-              </ul>
-
-          </div>
-
-      </div>
-
-  </div>
+<div class="breadcrumb-area">
+<div class="container">
+    <div class="breadcrumb-content">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li class="active"> Register</li>
+        </ul>
+    </div>
+        <div>
 
 
 
@@ -46,7 +43,7 @@
                           <table class="shopping-cart-table table">
                               <tr>
                                   <th class="text-left">
-                                      <a href="" class="primary-btn">Update Profile</a>
+                                      <a href="{% url 'account:account' %}" class="primary-btn">Update Profile</a>
                                       &nbsp; &nbsp; &nbsp;
                                       <a href="" class="primary-btn">Change Password</a>
                                   </th>
