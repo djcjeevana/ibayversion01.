@@ -28,12 +28,12 @@
                 <ul class="ht-setting-list">
                 {% if user.id is not None %}
                 <li><a href="">hi {{request.user.username}}</a></li>
-                <li><a href="" method="POST">Logout</a></li>
+                <li><a href="{%url 'account:logout'%}" method="POST">Logout</a></li>
                 <li><a href="checkout.html">Checkout</a></li>
-
+                
                 {% else %}
-                <li><a href="">Login</a></li>
-                <li><a href="">Register</a></li>
+                <li><a href="{%url 'account:login'%}">Login</a></li>
+                <li><a href="{%url 'account:register'%}">Register</a></li>
                 {% endif %}
                 </ul>
               </div>

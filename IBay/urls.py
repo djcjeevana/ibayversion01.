@@ -8,7 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('Stores.urls',namespace='Stores')),     
     path('location/',include('Location.urls')),
-    path('user/', include('UserApp.urls')),
+    path('user/', include('UserApp.urls',namespace='account')),
     path('product/',include('Products.urls')),
     #path('order/', include('OrderApp.urls')),
     path('order/', include('OrderApp.urls',namespace='OrderApp')),

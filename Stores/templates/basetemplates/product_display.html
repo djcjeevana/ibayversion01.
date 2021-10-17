@@ -80,7 +80,7 @@
                         <div class="add-actions">
                           <ul class="add-actions-link">
                             <li class="add-cart active">
-                              <a href="{%url 'OrderApp:add_to_shoping_cart' id=p.id %}">Add to cart</a>
+                              <a data-product="{{p.id}}" data-action="add"  class=update-cart>Add to cart</a>
                             </li>
                             <li>
                               <a class="links-details" href="wishlist.html"

@@ -1,0 +1,90 @@
+{% extends 'basetemplates/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block mainbody %}
+
+  
+  
+  <div class="breadcrumb-area">
+  <div class="container">
+      <div class="breadcrumb-content">
+          <ul>
+              <li><a href="index.html">Home</a></li>
+              <li class="active"> Register</li>
+          </ul>
+      </div>
+          <div>
+
+<div class="alert alert" role="alert">
+
+</div>
+
+</div>
+  </div>
+</div>
+<!-- Li's Breadcrumb Area End Here -->
+<!-- Begin Login Content Area -->
+<div class="page-section mb-60">
+  <div class="container">
+      <div class="row">
+
+                  <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
+              <form  method="POST">
+                  {% csrf_token %}
+                  <div class="login-form">
+                      <h4 class="login-title">Create an account</h4>
+                      <p class="mb-4">It's free and only takes a minute.</p>
+                      {% if form.errors %}
+                      <p>Please correct the following errors:</p>
+                      {% for field in form %}
+                      {% if field.errors %}
+                      <div class="alert alert-primary" role="alert">
+                       {{ field.label }}: {{ field.errors|striptags }}
+                      </div>
+                       {% endif %}
+                       {% endfor %}
+                        {% endif %}
+                      <div class="row">
+                           <div class="col-md-12 mb-20">
+                           <label>{{ form.user_name.label }}<span class="text-muted small">
+                           (Required)</span></label>
+                           {{ form.user_name }}
+                          </div>
+                          <div class="col-md-12 mb-20">
+                          <label>{{ form.email.label}}<span class="text-muted small">
+                          (Required)</span></label>
+                          {{ form.email }}
+                          </div>
+                          <div class="col-md-12 mb-20">
+                          <label>{{ form.password.label}}<span class="text-muted mb-4">
+                          </span></label>
+                   <small class="form-text text-muted mb-4 small">
+                      At least 8 characters and 1 digit
+                  </small>
+                  {{ form.password }}
+                          </div>
+                          <div class="col-md-12 mb-20">
+                          <label>{{ form.password2.label}}<span class="text-muted small">
+                          (Required)</span></label>
+                  {{ form.password2 }}
+                          </div>
+                          
+                          
+                          <div class="col-12">
+                              <button class="register-button mt-0">Register</button>
+                              <p class="text-center">
+                                
+                                </p>
+                          </div>
+                      </div>
+                  </div>
+              </form>
+          </div>
+     
+      </div>
+  </div>
+</div>
+
+{% endblock mainbody %}
