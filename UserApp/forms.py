@@ -2,10 +2,11 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core import validators
+from django.forms import fields
 from .models import UserBase
 from django.contrib.auth.forms import (AuthenticationForm, PasswordResetForm,
                                        SetPasswordForm)
-
+from django.contrib.auth import authenticate
 from Location.models import *
 
 #class PersonForm(UserCreationForm):
@@ -112,32 +113,26 @@ from Location.models import *
 #        return user
 
 
-class UserLoginForm(AuthenticationForm):
+        
+        
+        
+class RegistrationForm(UserCreationForm):
+   
     
-    username = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'account-form p-4 rounded', 'placeholder': 'Username', 'id': 'login-username'}))
-    password = forms.CharField(widget=forms.PasswordInput(
-        attrs={
-            'class': 'form-control',
-            'placeholder': 'Password',
-            'id': 'login-pwd',
-        }
-    ))
-
-
-class RegistrationForm(forms.ModelForm):
-    username = forms.CharField(
-        label='Enter Username', min_length=4, max_length=50, help_text='Required')
+    username = forms.CharField(max_length=100, label="username", widget=forms.TextInput(
+        attrs={'placeholder': 'Write Your username', }))
+    email = forms.EmailField(max_length=200, label='email', widget=forms.EmailInput(
+        attrs={'placeholder': 'Write Your email'}))
+    first_name = forms.CharField(max_length=100, label="first_name", widget=forms.TextInput(
+        attrs={'placeholder': 'Write Your first name'}))
+    last_name = forms.CharField(max_length=100, label="last_name", widget=forms.TextInput(
+        attrs={'placeholder': 'Write Your last name'}))
     
-    email = forms.EmailField(max_length=60, help_text='Required', error_messages={
-        'required': 'Sorry, you will need an email'})
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(
-        label='Repeat password', widget=forms.PasswordInput)
 
     class Meta:
         model = UserBase
-        fields = ('username', 'email',)
+        fields = ('username', 'email',
+                  'first_name','last_name','password1','password2')
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
@@ -145,6 +140,8 @@ class RegistrationForm(forms.ModelForm):
         if r.count():
             raise forms.ValidationError("Username already exists")
         return username
+    
+    
 
     def clean_password2(self):
         cd = self.cleaned_data
@@ -169,3 +166,87 @@ class RegistrationForm(forms.ModelForm):
             {'class': 'form-control mb-3', 'placeholder': 'Password'})
         self.fields['password2'].widget.attrs.update(
             {'class': 'form-control', 'placeholder': 'Repeat Password'})
+
+
+
+class UserLoginForm(forms.ModelForm):
+    
+    password = forms.CharField(label='Password',widget=forms.PasswordInput)
+    
+    class Meta:
+        model = UserBase
+        fields = ('email','password')
+        
+    def clean(self):
+        if self.is_valid():            
+            email = self.cleaned_data['email']
+            password = self.cleaned_data['password']
+            if not authenticate(email=email,password=password):
+                raise forms.ValidationError("Invalid Login")
+        
+        
+        
+class AccountUpdateForm(forms.ModelForm):
+    
+    
+    username = forms.CharField(label='User Name',widget=forms.TextInput)
+    first_name = forms.CharField(label='First Name',widget=forms.TextInput)
+    last_name = forms.CharField(label='Last Name',widget=forms.TextInput)
+    phone_number = forms.CharField(label='Phone Number',widget=forms.TextInput)   
+    postcode = forms.CharField(label='Postel Code',widget=forms.TextInput)
+    address_line_1 = forms.CharField(label='Address',widget=forms.TextInput)
+    town_city = forms.CharField(label='Password',widget=forms.TextInput)
+    
+      
+    class Meta:
+        model = UserBase
+        fields = ('username','first_name','last_name','phone_number','postcode','address_line_1','town_city')
+        
+    def clean_username(self):
+        if self.is_valid():
+            username = self.cleaned_data['username']
+            try:
+                account = UserBase.objects.exclude(pk=self.instance.pk).get(username=username) #check this account is exist or not
+            except UserBase.DoesNotExist:
+                # if email is not there
+                return username
+            raise forms.ValidationError('UserName "%s" is already in user'  % account)
+                
+    
+    def update_first_name(self):
+        if self.is_valid():
+            first_name = self.cleaned_data['first_name']
+            UserBase.objects.exclude(pk=self.instance.pk).get(first_name=first_name) #check this account is exist or not
+            
+        
+    def update_last_name(self):
+        if self.is_valid():
+            last_name = self.cleaned_data['last_name']
+            UserBase.objects.exclude(pk=self.instance.pk).get(last_name=last_name) #check this account is exist or not
+            
+        
+          
+        
+    def update_phone_number(self):
+        if self.is_valid():
+            phone_number = self.cleaned_data['phone_number']
+            UserBase.objects.exclude(pk=self.instance.pk).get(phone_number=phone_number) #check this account is exist or not
+            
+        
+    def update_postcode(self):
+        if self.is_valid():
+            postcode = self.cleaned_data['postcode']
+            UserBase.objects.exclude(pk=self.instance.pk).get(postcode=postcode) #check this account is exist or not
+            
+        
+    def update_address_line_1(self):
+        if self.is_valid():
+            address_line_1 = self.cleaned_data['address_line_1']
+            UserBase.objects.exclude(pk=self.instance.pk).get(address_line_1=address_line_1) #check this account is exist or not
+            
+    def update_town_city(self):
+        if self.is_valid():
+            town_city = self.cleaned_data['town_city']
+            UserBase.objects.exclude(pk=self.instance.pk).get(town_city=town_city) #check this account is exist or not
+            
+         

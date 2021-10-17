@@ -26,10 +26,11 @@
               <div class="ht-setting-trigger"><span>Login/Register</span></div>
               <div class="setting ht-setting">
                 <ul class="ht-setting-list">
-                {% if user.id is not None %}
-                <li><a href="">hi {{request.user.username}}</a></li>
-                <li><a href="{%url 'account:logout'%}" method="POST">Logout</a></li>
-                <li><a href="checkout.html">Checkout</a></li>
+                {% if request.user.is_authenticated %}
+                <li><a href="{% url 'account:userprofile' %}">Hello, {{request.user.username}}</a></li>
+                <li><a href="{% url 'account:account' %}">View Account</a></li>
+                <li><a href="{% url 'account:logout' %}">Logout</a></li>
+                
                 
                 {% else %}
                 <li><a href="{%url 'account:login'%}">Login</a></li>

@@ -50,13 +50,13 @@
                                       &nbsp; &nbsp; &nbsp;
                                       <a href="" class="primary-btn">Change Password</a>
                                   </th>
-                                  <td><img src="{{ profile.imageUrl}}"
+                                  <td><img src="{{ profile.profile_image.url}}"
                                           style="border-radius:10px; height: 100px;width:100px; ">
                                   </td>
                               </tr>
                               <tr>
                                   <th class="text-left">User Name :</th>
-                                  <td class="text-left">{{ profile.name}}  </td>
+                                  <td class="text-left">{{ profile.username}}  </td>
                               </tr>
                               <tr>
                                   <th class="text-left">Full Name :</th>
@@ -68,20 +68,17 @@
                               </tr>
                               <tr>
                                   <th class="text-left">Phone</th>
-                                  <td class="text-left">{{ profile.phone}}</td>
+                                  <td class="text-left">{{ profile.phone_number}}</td>
                               </tr>
                               <tr>
                                   <th class="text-left">Addres</th>
-                                  <td class="text-left">{{ profile.address}}</td>
+                                  <td class="text-left">{{ profile.address_line_1}}</td>
                               </tr>
                               <tr>
                                   <th class="text-left">City</th>
-                                  <td class="text-left">{{ profile.city}}</td>
+                                  <td class="text-left">{{ profile.town_city}}</td>
                               </tr>
-                              <tr>
-                                  <th class="text-left">Country</th>
-                                  <td class="text-left">{{ profile.country}}</td>
-                              </tr>
+                              
 
                           </table>
                       </div>

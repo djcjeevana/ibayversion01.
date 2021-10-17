@@ -1,15 +1,17 @@
-from django.contrib.auth import login, logout
+from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from Stores.models import Setting
 
 #from orders.views import user_orders
 
-from .forms import RegistrationForm
+from .forms import RegistrationForm,UserLoginForm,AccountUpdateForm
 from .models import UserBase
 from .tokens import account_activation_token
 
@@ -46,6 +48,11 @@ def account_register(request):
         
     else:
         registerForm = RegistrationForm()
+    setting = Setting.objects.get(id=1)
+    context = {
+               'setting': setting,
+               'form': registerForm}
+    
     return render(request, 'account/registration/register.html', {'form': registerForm})
 
 def account_activate(request, uidb64, token):
@@ -58,6 +65,85 @@ def account_activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
+        # SUSPECT CODE 
+        current_user = request.user
+        data =UserBase()
+        data.id = current_user.id
+        data.profile_image="ibayimage/logo_1080_1080.png"
+        data.save()
+        # SUSPECT CODE 
         return redirect('account:dashboard')
     else:
         return render(request, 'account/registration/activation_invalid.html')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("Stores:home")
+
+
+def login_view(request):
+    context = {}
+    
+    user = request.user
+    if user.is_authenticated:
+        return redirect("Stores:home")
+    
+    if request.POST: 
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+             email = request.POST['email']
+             password = request.POST['password']
+             user = authenticate(email=email,password=password)
+             
+             if user:
+                 login(request,user)
+                 return redirect("Stores:home")
+             
+    else:
+        form = UserLoginForm()
+            
+    context['login_form'] = form
+    return render(request,'account/registration/login.html',context)
+
+
+def account_view(request):
+    
+    if not request.user.is_authenticated:
+        return redirect("Stores:home")
+    
+    context = {}
+    
+    if request.POST:
+        form = AccountUpdateForm(request.POST,instance=request.user)
+        if form.is_valid():
+            form.save()
+        
+    else:
+        form = AccountUpdateForm(
+                initial={
+                 "username":request.user.username,
+                 "first_name":request.user.first_name,
+                 "last_name":request.user.last_name,
+                 "phone_number":request.user.phone_number,
+                 "postcode":request.user.postcode,
+                 "address_line_1":request.user.address_line_1,
+                 "town_city":request.user.town_city,
+                    
+                }
+                )
+    context['account_form'] = form
+    return render(request,'account/registration/account.html',context)
+
+
+def userprofile(request):
+    
+    setting = Setting.objects.get(id=1)
+    current_user = request.user
+    profile = UserBase.objects.get(id=current_user.id)
+    print('-------------------------------------------------------------- prociel',profile)
+    context = {
+               'setting': setting,
+               'profile': profile}
+    return render(request, 'account/registration/user_profile.html', context)
+        

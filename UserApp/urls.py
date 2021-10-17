@@ -6,18 +6,20 @@ from django.urls import path
 from django.views.generic import TemplateView
 from .forms import  UserLoginForm
 
-from . import views
+
 from .views import *
 
 app_name = 'account'
 
 urlpatterns = [
-  path('login/', auth_views.LoginView.as_view(template_name='account/registration/login.html',
-                                                form_class=UserLoginForm), name='login'),
-  path('logout/', auth_views.LogoutView.as_view(next_page='/account/login/'), name='logout'),
-  path('register/', views.account_register, name='register'),
-  path('activate/<slug:uidb64>/<slug:token>)/', views.account_activate, name='activate'),
-  path('dashboard/', views.dashboard, name='dashboard'),
+  path('login/', login_view, name='login'),
+  path('logout/', logout_view, name='logout'),
+  path('register/', account_register, name='register'),
+  path('activate/<slug:uidb64>/<slug:token>)/',account_activate, name='activate'),
+  path('dashboard/', dashboard, name='dashboard'),
+  path('account/', account_view, name='account'),
+  path('profile/', userprofile, name='userprofile'),
+  
    
 ] 
 

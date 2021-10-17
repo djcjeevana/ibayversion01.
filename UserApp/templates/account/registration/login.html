@@ -30,44 +30,47 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-xs-12 col-lg-6 mb-30">
                             <!-- Login Form s-->
-                            <form class="account-form p-4 rounded" action="{%url 'account:login'%}" method="POST" >
-                                {% csrf_token %}
-                                <div class="login-form">
-                                    <h4 class="login-title">Sign In</h4>
-                                    {% if form.errors %}
-                                <div class="alert alert-primary" role="alert">
-                                    Error: Username or Password not correct!
-                                </div>
-                                {% endif %}
-                                    <div class="row">
-                                         <div class="col-12 mb-20">
-                                         <label class="form-label">{{ form.username.label}}</label>
-                                         {{ form.username}}
-                                            
-                                        </div>
-                                        <div class="col-12 mb-20">
-                                        <label class="form-label">{{ form.password.label}}</label>
-                                        {{ form.password}}
-                                            
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="check-box d-inline-block ml-0 ml-md-2 mt-10">
-                                                <input type="checkbox" id="remember_me">
-                                                <label for="remember_me">Remember me</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mt-10 mb-20 text-left text-md-right">
-                                            <a href="#"> Forgotten pasward?</a>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <button class="register-button mt-0">Login</button>
+
+                            <form method="POST" >{% csrf_token %}
+                            <div class="login-form">
+                                <h4 class="login-title">Login</h4>
+                                <div class="row">
+                                    {% for field in login_form %}
+                                     <div class="col-12 mb-20">
+                                        <label>{{field.labe_tag}}</label>
+                                        {{field}}
+                                        {%if field.help_text%}
+                                        <small styel="color:grey;">{{field.help_text}}</small>
+                                        {% endif%}                                        
+                                    </div>
+                                    {% endfor %}
+                                    {% for field in login_form %}
+                                        {% for error in field.errors %}
+                                        <p styel="color:red;">{{error}}</p>  
+                                        {% endfor %}
+                                    {% endfor %}
+                                    {% if login_form.non_field_errors %}
+                                        <div>
+                                            <p>{{login_form.non_field_errors}}</p>
+                                        </div> 
+                                    {% endif %}
+                                    
+                                    <div class="col-md-8">
+                                        <div class="check-box d-inline-block ml-0 ml-md-2 mt-10">
+                                            <input type="checkbox" id="remember_me">
+                                            <label for="remember_me">Remember me</label>
                                         </div>
                                     </div>
+                                    <div class="col-md-4 mt-10 mb-20 text-left text-md-right">
+                                        <a href="#"> Forgotten pasward?</a>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button class="register-button mt-0">Login</button>
+                                    </div>
                                 </div>
-                                <p class="text-center pb-3">
-                                <a href="">Create an account</a>
-                            </p>
-                            </form>
+                            </div>
+                        </form>
+
                             <p class="small text-center pt-4">
                                 {% comment %} <a href="">Forgotten Password?</a> {% endcomment %}
                             </p>
