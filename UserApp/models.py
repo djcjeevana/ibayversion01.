@@ -7,6 +7,7 @@ from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+
 from Location.models import *
 
 # Create your models here.
@@ -79,7 +80,7 @@ class UserBase(AbstractBaseUser, PermissionsMixin):
     profile_image = models.ImageField(max_length=225,upload_to=get_profile_image_filepath,null=True,blank=True,default=get_default_profile_image)
     hide_email = models.BooleanField(default=True)
     
-    created = models.DateTimeField(auto_now_add=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     objects = CustomAccountManager()

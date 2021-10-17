@@ -17,6 +17,10 @@ SECRET_KEY = 'django-insecure-fdn0y3@a#qz@-+6(k3dh%-yhv$(e5i=mri60v+k2k3p7(l(k+2
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+    'UserApp.backends.CaseInsensitiveModelBackend'
+)
 
 
 

@@ -21,6 +21,7 @@ def dashboard(request):
 
 def account_register(request):
     
+    
     if request.user.is_authenticated: # to check user is register or not
         return redirect('account:dashboard')
 
@@ -29,7 +30,7 @@ def account_register(request):
         if registerForm.is_valid():#chek all the email password etc. are enderd correcctly . for that we use validation method.
             user = registerForm.save(commit=False)
             user.email = registerForm.cleaned_data['email']
-            user.set_password(registerForm.cleaned_data['password'])
+            user.set_password(registerForm.cleaned_data['password1'])
             user.is_active = False # still user need make inactive. becaseu we need to check about him. becasue email activation is requered
             user.save()
             current_site = get_current_site(request)
@@ -42,10 +43,10 @@ def account_register(request):
             })
             user.email_user(subject=subject, message=message) # in here you can add more informatino to your email. this your email body and content
             return HttpResponse('registered succesfully and activation sent')
+        
     else:
-        registerForm = RegistrationForm() # if he is new youser we redirect him to Registraion form
+        registerForm = RegistrationForm()
     return render(request, 'account/registration/register.html', {'form': registerForm})
-
 
 def account_activate(request, uidb64, token):
     try:

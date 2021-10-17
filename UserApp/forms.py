@@ -126,29 +126,29 @@ class UserLoginForm(AuthenticationForm):
 
 
 class RegistrationForm(forms.ModelForm):
-    
-    user_name = forms.CharField(
+    username = forms.CharField(
         label='Enter Username', min_length=4, max_length=50, help_text='Required')
-    email = forms.EmailField(max_length=100, help_text='Required', error_messages={
+    
+    email = forms.EmailField(max_length=60, help_text='Required', error_messages={
         'required': 'Sorry, you will need an email'})
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(
         label='Repeat password', widget=forms.PasswordInput)
 
     class Meta:
         model = UserBase
-        fields = ('user_name', 'email',)
+        fields = ('username', 'email',)
 
     def clean_username(self):
-        user_name = self.cleaned_data['user_name'].lower()
-        r = UserBase.objects.filter(user_name=user_name)
+        username = self.cleaned_data['username'].lower()
+        r = UserBase.objects.filter(username=username)
         if r.count():
             raise forms.ValidationError("Username already exists")
-        return user_name
+        return username
 
     def clean_password2(self):
         cd = self.cleaned_data
-        if cd['password'] != cd['password2']:
+        if cd['password1'] != cd['password2']:
             raise forms.ValidationError('Passwords do not match.')
         return cd['password2']
 
@@ -161,11 +161,11 @@ class RegistrationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['user_name'].widget.attrs.update(
+        self.fields['username'].widget.attrs.update(
             {'class': 'form-control mb-3', 'placeholder': 'Username'})
         self.fields['email'].widget.attrs.update(
             {'class': 'form-control mb-3', 'placeholder': 'E-mail', 'name': 'email', 'id': 'id_email'})
-        self.fields['password'].widget.attrs.update(
+        self.fields['password1'].widget.attrs.update(
             {'class': 'form-control mb-3', 'placeholder': 'Password'})
         self.fields['password2'].widget.attrs.update(
             {'class': 'form-control', 'placeholder': 'Repeat Password'})

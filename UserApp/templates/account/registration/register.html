@@ -41,16 +41,16 @@
                       {% for field in form %}
                       {% if field.errors %}
                       <div class="alert alert-primary" role="alert">
-                       {{ field.label }}: {{ field.errors|striptags }}
+                       {{ field.label }}:{{ field.errors|striptags }}
                       </div>
                        {% endif %}
                        {% endfor %}
                         {% endif %}
                       <div class="row">
                            <div class="col-md-12 mb-20">
-                           <label>{{ form.user_name.label }}<span class="text-muted small">
+                           <label>{{ form.username.label }}<span class="text-muted small">
                            (Required)</span></label>
-                           {{ form.user_name }}
+                           {{ form.username }}
                           </div>
                           <div class="col-md-12 mb-20">
                           <label>{{ form.email.label}}<span class="text-muted small">
@@ -58,12 +58,12 @@
                           {{ form.email }}
                           </div>
                           <div class="col-md-12 mb-20">
-                          <label>{{ form.password.label}}<span class="text-muted mb-4">
+                          <label>{{ form.password1.label}}<span class="text-muted mb-4">
                           </span></label>
                    <small class="form-text text-muted mb-4 small">
                       At least 8 characters and 1 digit
                   </small>
-                  {{ form.password }}
+                  {{ form.password1 }}
                           </div>
                           <div class="col-md-12 mb-20">
                           <label>{{ form.password2.label}}<span class="text-muted small">
